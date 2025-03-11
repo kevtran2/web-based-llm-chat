@@ -1,27 +1,14 @@
 import './App.css';
+import { useState } from 'react';
 
-const apiCall = async () => {
-  try {
-    const response = await fetch('http://localhost:8080');
-    if (!response.ok) {
-      throw new Error(`HTTP GET error! Status: ${response.status}`);
-    }
-    const data = await response.json(); 
-    console.log(data);
-    console.log('GET success!!');
-  } catch (error) {
-    console.error(`Error with GET request: ${error}`);
-  }
-};
-
-const sendTextMessage = async () => {
+const sendTextMessage = async (msg) => {
   try {
     const response = await fetch('http://localhost:8080', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ prompt: 'My question to chatgpt' }),
+      body: JSON.stringify({ prompt: `My question to chatgpt: ${msg}` }),
     });
     if (!response.ok) {
       throw new Error(`HTTP POST error! Status: ${response.status}`);
@@ -35,17 +22,29 @@ const sendTextMessage = async () => {
 }
 
 function App() {
+  const [textBarValue, setTextBarValue] = useState('');
+  
+  const handleKeyPressed = (KeyboardEvent) => {
+    if (KeyboardEvent.key === 'Enter') {
+      sendTextMessage(textBarValue)
+    }
+  }
+
+  const handleTextState = (e) => {
+    setTextBarValue(e.target.value);
+  }
+
   return (
     <div className="App">
       <header className="App-header">
-        <button onClick={apiCall}>Make API Call</button>
-        <input 
-        type='text' 
-        onKeyDown={(KeyboardEvent) => {
-          if (KeyboardEvent.key === 'Enter') {
-            sendTextMessage()
-          }
-        }}></input>
+        <div className="text-bar" >
+          <input 
+          type='text' 
+          onChange={handleTextState}
+          onKeyDown={handleKeyPressed}>
+          </input>
+          <button onClick={() => {sendTextMessage(textBarValue)}}>Send</button>
+        </div>
       </header>
     </div>
   );
