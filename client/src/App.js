@@ -8,6 +8,7 @@ function App() {
   
   const sendTextMessage = async (msg) => {
     if (msg === '') return
+    setTextBarValue('');
     try {
       const response = await fetch('http://localhost:8080', {
         method: 'POST',
@@ -34,8 +35,6 @@ function App() {
             setMessageHistory([...messageHistory, msg, streamData])
           }
       }
-      
-      setTextBarValue('');
     } catch (error) {
       console.error(`Error with POST request: ${error}`);
     }
