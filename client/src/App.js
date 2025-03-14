@@ -19,7 +19,7 @@ function App() {
       });
       if (!response.ok) {
         if (response.status === 429) {
-          setMessageHistory([...messageHistory, msg, 'Error: ChatGPT API rate limit exceeded. Please try again after an hour.']);
+          setMessageHistory([...messageHistory, msg, 'Error: ChatGPT API rate limit exceeded. Please try again after a couple of minutes.']);
           return;
         }
         throw new Error(`HTTP POST error! Status: ${response.status}`);
